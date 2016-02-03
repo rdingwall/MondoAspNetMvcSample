@@ -1,0 +1,33 @@
+﻿@model MondoAspNetMvcSample.Models.AccountSummaryModel
+
+@{
+    ViewBag.Title = "Account Summary";
+}
+
+<h1 class="text-center">@Model.Account.Description</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2><small>Balance:</small></h2>
+        <div class="well well-lg">
+            <span class="h2">@Html.FormatValue(Model.Balance.Value/100m, "{0:C}")</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h2><small>Spend Today:</small></h2>
+        <div class="well well-lg">
+            <span class="h2">@Html.FormatValue(-Model.Balance.SpendToday/100m, "{0:C}")</span>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover">
+    @foreach (var transaction in @Model.Transactions.OrderByDescending(t => t.Created))
+    {
+        <tr>
+            <td><img src="@(transaction.Merchant?.Logo)" width="64" height="64" class="img-rounded" /></td>
+            <td><span class="h3">@(transaction.Merchant?.Name ?? transaction.Description)</span></td>
+            <td class="text-right"><span class="h3">@Html.FormatValue(-transaction.Amount / 100m, "{0:0.00}")</span></td>
+        </tr> 
+    }
+</table>
